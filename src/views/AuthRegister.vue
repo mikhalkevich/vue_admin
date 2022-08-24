@@ -92,6 +92,7 @@ export default {
         'email':this.email,
         'password':this.password
       });
+      localstorage.setItem('token', data.data.token);
        */
       console.log(this.email, this.name, this.password, this.password_repeat)
     }
