@@ -8,8 +8,19 @@
       <div class="collapse navbar-collapse" id="navbarCollapse">
         <ul class="navbar-nav">
           <li class="nav-item">
-            <a class="nav-link active" aria-current="page" href="#">Home</a>
+            <router-link class="nav-link" to="/">Home</router-link>
           </li>
+
+        </ul>
+        <ul class="navbar-nav" v-if="user">
+          <li class="nav-item">
+            <router-link class="nav-link" to="/cabinet">{{user.name}}</router-link>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="#" @click="logout">logout</a>
+          </li>
+        </ul>
+        <ul class="navbar-nav" v-else>
           <li class="nav-item">
             <router-link class="nav-link" to="/login">Login</router-link>
           </li>
@@ -24,7 +35,14 @@
 
 <script>
 export default {
-  name: "MenuTop.vue"
+  name: "MenuTop.vue",
+  props:['user'],
+  methods:{
+    logout(){
+      localStorage.clear();
+      this.$router.push('/');
+    }
+  }
 }
 </script>
 
