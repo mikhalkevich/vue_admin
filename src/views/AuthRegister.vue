@@ -10,12 +10,12 @@
 
                   <p class="text-center h1 fw-bold mb-5 mx-1 mx-md-4 mt-4">Sign up</p>
 
-                  <form class="mx-1 mx-md-4">
+                  <form class="mx-1 mx-md-4" @submit.prevent="submit">
 
                     <div class="d-flex flex-row align-items-center mb-4">
                       <i class="fas fa-user fa-lg me-3 fa-fw"></i>
                       <div class="form-outline flex-fill mb-0">
-                        <input type="text" id="form3Example1c" class="form-control" v-model="name" />
+                        <input type="text" id="form3Example1c" class="form-control" v-model="user_name" />
                         <label class="form-label" for="form3Example1c">Your Name</label>
                       </div>
                     </div>
@@ -39,7 +39,7 @@
                     <div class="d-flex flex-row align-items-center mb-4">
                       <i class="fas fa-key fa-lg me-3 fa-fw"></i>
                       <div class="form-outline flex-fill mb-0">
-                        <input type="password" id="form3Example4cd" class="form-control" v-model="password_repeat" />
+                        <input type="password" id="form3Example4cd" class="form-control" v-model="password_confirmation" />
                         <label class="form-label" for="form3Example4cd">Repeat your password</label>
                       </div>
                     </div>
@@ -52,7 +52,7 @@
                     </div>
 
                     <div class="d-flex justify-content-center mx-4 mb-3 mb-lg-4">
-                      <button type="button" class="btn btn-primary btn-lg" @click="this.send_login_data()">Register</button>
+                      <button class="btn btn-primary btn-lg" type="submit" >Register</button>
                     </div>
 
                   </form>
@@ -74,29 +74,38 @@
 </template>
 
 <script>
-//import axios from "axios";
+import axios from "axios";
+import {ref} from "vue";
+import {useRouter} from "vue-router";
 export default {
   name: "AuthRegister",
-  data() {
-    return {
-      email: '',
-      name: '',
-      password: '',
-      password_repeat: '',
-    };
-  },
-  methods: {
-    async send_login_data() {
-      /*
-      const { data } = await axios.post(`http://localhost:8001/api/login`,{
-        'email':this.email,
-        'password':this.password
+  setup(){
+    const user_name = ref('');
+    const email = ref('');
+    const password = ref('');
+    const password_confirmation = ref('');
+    const router = useRouter();
+    const submit = async () => {
+      //console.log(user_name, email)
+      const response = await axios.post('register',{
+        name: user_name.value,
+        email: email.value,
+        password: password.value,
+        password_confirmation:password_confirmation.value
       });
-      localstorage.setItem('token', data.data.token);
-       */
-      console.log(this.email, this.name, this.password, this.password_repeat)
+      await localStorage.setItem('token', response.data.token);
+      await console.log(response.data);
+      await router.push('/home');
+    }
+    return {
+      user_name,
+      email,
+      password,
+      password_confirmation,
+      submit
     }
   }
+
 }
 </script>
 

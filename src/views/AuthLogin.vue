@@ -9,7 +9,7 @@
                 <div class="col-md-10 col-lg-6 col-xl-5 order-2 order-lg-1">
                   <p class="text-center h1 fw-bold mb-5 mx-1 mx-md-4 mt-4">Sign in</p>
 
-                  <form class="mx-1 mx-md-4">
+                  <form class="mx-1 mx-md-4" @submit.prevent="submit">
                     <div class="d-flex flex-row align-items-center mb-4">
                       <i class="fas fa-envelope fa-lg me-3 fa-fw"></i>
                       <div class="form-outline flex-fill mb-0">
@@ -25,7 +25,7 @@
                       </div>
                     </div>
                     <div class="d-flex justify-content-center mx-4 mb-3 mb-lg-4">
-                      <button type="submit" class="btn btn-primary btn-lg" @click="sendLogin">Login</button>
+                      <button type="submit" class="btn btn-primary btn-lg">Login</button>
                     </div>
                   </form>
 
@@ -45,26 +45,29 @@
 
 <script>
 import axios from "axios";
+import {ref} from "vue";
 
 export default {
   name: 'AuthLogin',
-  data() {
-    return {
-      email: '',
-      password: '',
-      router: ''
-    }
-  },
-  methods: {
-    async sendLogin() {
-      const {data} = await axios.post(`login`, {
-        'email': this.email,
-        'password': this.password
+  setup() {
+    const email = ref('');
+    const password = ref('');
+    const submit = async () => {
+      //console.log(user_name, email)
+      const response = await axios.post('login',{
+        email: email.value,
+        password: password.value,
       });
-      await localStorage.setItem('token', data.token);
-      //document.location.href = '/';
-      await this.$router.push('/');
-    },
+      await localStorage.setItem('token', response.data.token);
+      //await console.log(response.data);
+      //await router.push('/home');
+       document.location.href= '/';
+    }
+    return {
+      email,
+      password,
+      submit
+    }
   }
 }
 </script>

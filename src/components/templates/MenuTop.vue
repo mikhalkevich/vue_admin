@@ -8,13 +8,13 @@
       <div class="collapse navbar-collapse" id="navbarCollapse">
         <ul class="navbar-nav">
           <li class="nav-item">
-            <router-link class="nav-link" to="/">Home</router-link>
+            <router-link class="nav-link" to="/">Main</router-link>
           </li>
 
         </ul>
         <ul class="navbar-nav" v-if="user">
           <li class="nav-item">
-            <router-link class="nav-link" to="/cabinet">{{user.name}}</router-link>
+            <router-link class="nav-link" to="/home">{{user.name}}</router-link>
           </li>
           <li class="nav-item">
             <a class="nav-link" href="#" @click="logout">logout</a>
@@ -34,13 +34,27 @@
 </template>
 
 <script>
+import axios from "axios";
+import {ref, onMounted} from "vue";
+//import {useRouter} from "vue-router";
 export default {
   name: "MenuTop.vue",
-  props:['user'],
-  methods:{
-    logout(){
+  setup(){
+    //const router = useRouter();
+    const user = ref('');
+    const logout = () => {
       localStorage.clear();
-      this.$router.push('/');
+      //router.push('/');
+      document.location.href= '/';
+    }
+    onMounted(async () => {
+     const response = await axios.get('profile');
+      user.value = response.data;
+     //console.log(response);
+    })
+    return {
+      logout,
+      user
     }
   }
 }
