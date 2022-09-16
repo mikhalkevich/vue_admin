@@ -76,7 +76,6 @@
 <script>
 import axios from "axios";
 import {ref} from "vue";
-import {useRouter} from "vue-router";
 export default {
   name: "AuthRegister",
   setup(){
@@ -84,7 +83,6 @@ export default {
     const email = ref('');
     const password = ref('');
     const password_confirmation = ref('');
-    const router = useRouter();
     const submit = async () => {
       //console.log(user_name, email)
       const response = await axios.post('register',{
@@ -94,8 +92,7 @@ export default {
         password_confirmation:password_confirmation.value
       });
       await localStorage.setItem('token', response.data.token);
-      await console.log(response.data);
-      await router.push('/home');
+       document.location.href= '/';
     }
     return {
       user_name,
