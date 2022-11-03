@@ -38,7 +38,7 @@ export default {
       DialogVisible.value = true;
     };
     const SendData = () => {
-      console.log(ProductName, ProductDescription, SelectedOption);
+      console.log(ProductName.value, ProductDescription.value, SelectedOption);
     };
     onMounted(async () => {
       const response = await axios.get('catalogs');
